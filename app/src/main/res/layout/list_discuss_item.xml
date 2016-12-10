@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvMessageAuthor"
+            android:text="Pupkin Vasiliy"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorAccent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_message"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvMessageDate"
+            android:gravity="right"
+            android:text="12.04.1222"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:linksClickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

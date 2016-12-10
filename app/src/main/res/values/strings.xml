@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">CSTaskClient</string>
+    
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="prompt_login">Login</string>
+    <string name="projects">Projects</string>
+    <string name="login_title">CS Task Management system</string>
+    <string name="openDrawer">Open menu</string>
+    <string name="closeDrawer">Close menu</string>
+    <string name="login.error">Failed to authorize!</string>
+    <string name="login_error_network">Can not authentificate in the system. Make sure you have internet connection</string>
+    <string name="error_network">Can not load data. Make sure you have internet connection</string>
+    <string name="workTime">Work hours</string>
+    <string name="worktimeDescr">Work description</string>
+    <string name="button_ok">OK</string>
+    <string name="dialog_worktime">Specify Work description and time</string>
+    <string name="error_api_operation">Operation failed, the server may be down. Please, try again soon</string>
+    <string name="api_operation_status">Operation status:</string>
+</resources>

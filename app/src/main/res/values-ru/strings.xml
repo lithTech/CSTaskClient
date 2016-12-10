@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CSTaskClient</string>
+    <string name="action_sign_in">Вход</string>
+    <string name="action_sign_in_short">Вход</string>
+    <string name="error_field_required">Обязательное поле</string>
+    <string name="error_incorrect_password">Неверный пароль</string>
+    <string name="error_invalid_email">Неверный email</string>
+    <string name="error_invalid_password">Пароль слишком короткий</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="prompt_login">Имя пользователя</string>
+    <string name="projects">Проекты</string>
+    <string name="login_title">CS Task Management</string>
+    <string name="openDrawer">Открыть меню</string>
+    <string name="closeDrawer">Закрыть меню</string>
+    <string name="login.error">Ошибка при авторизации</string>
+    <string name="login_error_network">Не удалось авторизоваться в системе. Возможно, нет интернет подключения</string>
+    <string name="error_network">Не удалось получить данные. Проверьте подключение</string>
+    <string name="workTime">Рабочие часы</string>
+    <string name="worktimeDescr">Work description</string>
+    <string name="button_ok">OK</string>
+    <string name="error_api_operation">Ошибка операции. Возможно, проблемы с сервером. Повторите операцию позже</string>
+    <string name="api_operation_status">Статус операции:</string>
+</resources>

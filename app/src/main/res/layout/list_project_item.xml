@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/tvProjectTitle" />
+
+        <TextView
+            android:text="TextView"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/tvProjectDescription" />
+
+        <TextView
+            android:text="TextView"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/colorAccent"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/tvProjectAuthor" />
+    </LinearLayout>
+
+
+</LinearLayout>
