@@ -72,12 +72,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentManager sfm = getSupportFragmentManager();
             int count = sfm.getBackStackEntryCount();
 
-            if (count == 0)
+            if (count <= 1)
             {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
             else
             {
+                count--;
+                if (count > 0 && sfm.getFragments().size() >= count) {
+                    Fragment fragment = sfm.getFragments().get(count - 1);
+                    setTitle(fragment.getArguments().getString("TITLE"));
+                }
                 sfm.popBackStack();
             }
         }
@@ -123,8 +128,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
-                .addToBackStack(null)
+                .addToBackStack(title)
                 .commit();
+
+        Bundle args = fragment.getArguments();
+        if (args == null) {
+            args = new Bundle();
+            fragment.setArguments(args);
+        }
+        args.putString("TITLE", title);
+
         setTitle(title);
     }
 }

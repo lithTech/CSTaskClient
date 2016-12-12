@@ -18,7 +18,7 @@
     <string name="login_error_network">Не удалось авторизоваться в системе. Возможно, нет интернет подключения</string>
     <string name="error_network">Не удалось получить данные. Проверьте подключение</string>
     <string name="workTime">Рабочие часы</string>
-    <string name="worktimeDescr">Work description</string>
+    <string name="worktimeDescr">Описание работ</string>
     <string name="button_ok">OK</string>
     <string name="error_api_operation">Ошибка операции. Возможно, проблемы с сервером. Повторите операцию позже</string>
     <string name="api_operation_status">Статус операции:</string>
