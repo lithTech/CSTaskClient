@@ -69,7 +69,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            FragmentManager sfm = getSupportFragmentManager();
+            int count = sfm.getBackStackEntryCount();
+
+            if (count == 0)
+            {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+            else
+            {
+                sfm.popBackStack();
+            }
         }
     }
 
@@ -107,7 +117,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void loadFragment(String title, Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+        if (fragmentManager.getBackStackEntryCount() > 8)
+            fragmentManager.popBackStack();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
         setTitle(title);
     }
 }

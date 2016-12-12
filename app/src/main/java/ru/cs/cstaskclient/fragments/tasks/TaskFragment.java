@@ -51,21 +51,17 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
 
         lvTasks = (ListView) view.findViewById(R.id.lvTasks);
 
-        updateData(listRequestCurrent, new ru.cs.cstaskclient.util.Callback() {
-            @Override
-            public void done(Object o) {
-                List<Task> taskList = (List<Task>) o;
-                lvTasks.setAdapter(new TaskListAdapter(getActivity(), taskList));
-            }
-        });
+        srlLoading = (SwipeRefreshLayout) view.findViewById(R.id.srlLoading);
+
+        onRefresh();
 
         lvTasks.setOnScrollListener(this);
 
         lvTasks.setOnItemClickListener(this);
 
-        srlLoading = (SwipeRefreshLayout) view.findViewById(R.id.srlLoading);
-
         srlLoading.setOnRefreshListener(this);
+
+        stopRefreshOnScroll = false;
 
         return view;
     }
@@ -75,7 +71,6 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
         super.onCreate(savedInstanceState);
         listRequestCurrent = new GridQueryRequestTask();
         categoryId = getArguments().getLong(Const.ARG_TASK_CATEGORY_ID, 0);
-        resetListRequest();
     }
 
     public void resetListRequest() {
@@ -88,10 +83,12 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
 
     public void updateData(GridQueryRequestTask request,
                            final ru.cs.cstaskclient.util.Callback callback) {
+        srlLoading.setRefreshing(true);
         Call<GridQueryResultTask> tasksCall = taskApi.getTasks(request);
         tasksCall.enqueue(new Callback<GridQueryResultTask>() {
             @Override
             public void onResponse(Call<GridQueryResultTask> call, Response<GridQueryResultTask> response) {
+                srlLoading.setRefreshing(false);
                 callback.done(response.body().data);
             }
 
@@ -133,7 +130,6 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
                 TaskListAdapter taskListAdapter = (TaskListAdapter) lvTasks.getAdapter();
                 taskListAdapter.addAll(newItems);
                 taskListAdapter.notifyDataSetChanged();
-                srlLoading.setRefreshing(false);
 
                 stopRefreshOnScroll = newItems.isEmpty();
             }

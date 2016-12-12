@@ -23,6 +23,8 @@ import ru.cs.cstaskclient.MainActivity;
 import ru.cs.cstaskclient.R;
 import ru.cs.cstaskclient.dto.Category;
 import ru.cs.cstaskclient.dto.Project;
+import ru.cs.cstaskclient.fragments.category.CategoryAdapter;
+import ru.cs.cstaskclient.fragments.category.CategoryFragment;
 import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.CategoryApi;
@@ -35,9 +37,7 @@ import ru.cs.cstaskclient.repository.ProjectApi;
 public class ProjectViewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     ListView lvProjects;
-    ListView lvCategories;
     ProjectApi projectApi;
-    CategoryApi categoryApi;
 
     @Nullable
     @Override
@@ -45,33 +45,13 @@ public class ProjectViewFragment extends Fragment implements AdapterView.OnItemC
         View v = inflater.inflate(R.layout.layout_fragment_projects, container, false);
 
         projectApi = ApiManager.getProjectApi();
-        categoryApi = ApiManager.getCategoryApi();
 
         lvProjects = (ListView) v.findViewById(R.id.lvProjects);
-        lvCategories = (ListView) v.findViewById(R.id.lvCategories);
         updateProjectData(lvProjects);
 
         lvProjects.setOnItemClickListener(this);
-        lvCategories.setOnItemClickListener(this);
 
         return v;
-    }
-
-    public void updateCategoryData(long projectId, long catId, final ListView listView, final ru.cs.cstaskclient.util.Callback callback) {
-        Call<List<Category>> categories = categoryApi.getCategory(projectId, catId);
-        categories.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                listView.setAdapter(new CategoryAdapter(getActivity(), response.body()));
-                callback.done(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     public void updateProjectData(final ListView listView) {
@@ -100,19 +80,12 @@ public class ProjectViewFragment extends Fragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (adapterView == lvProjects) {
             Project project = ((Project) lvProjects.getItemAtPosition(i));
-            updateCategoryData(project.id, project.id, lvCategories, new ru.cs.cstaskclient.util.Callback() {
-                @Override
-                public void done(Object o) {
-                    lvProjects.setVisibility(View.GONE);
-                    lvCategories.setVisibility(View.VISIBLE);
-                }
-            });
-        } else if (adapterView == lvCategories) {
-            Category category = (Category) lvCategories.getItemAtPosition(i);
-            Fragment fragment = new TaskFragment();
+
+            Fragment fragment = new CategoryFragment();
             fragment.setArguments(new Bundle());
-            fragment.getArguments().putLong(Const.ARG_TASK_CATEGORY_ID, category.id);
-            ((MainActivity) getActivity()).loadFragment(category.title, fragment);
+            fragment.getArguments().putLong(Const.ARG_PROJECT_ID, project.id);
+            ((MainActivity) getActivity()).loadFragment(project.title, fragment);
+
         }
     }
 

@@ -53,6 +53,8 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
         srlLoading.setOnRefreshListener(this);
 
+        resetDiscussRequest();
+
         onRefresh();
 
         lvDiscuss.setOnScrollListener(this);
@@ -66,7 +68,6 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
         discussApi = ApiManager.getDiscussApi();
         taskId = getArguments().getLong(Const.ARG_TASK_ID);
-        resetDiscussRequest();
     }
 
     public void resetDiscussRequest() {
@@ -132,6 +133,8 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
     @Override
     public void onRefresh() {
+        resetDiscussRequest();
+        stopRefreshOnScroll = false;
         updateData(listDiscussRequest, taskId, new Callback() {
             @Override
             public void done(Object o) {

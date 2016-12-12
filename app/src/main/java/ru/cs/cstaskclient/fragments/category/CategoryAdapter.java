@@ -1,4 +1,4 @@
-package ru.cs.cstaskclient.fragments.project;
+package ru.cs.cstaskclient.fragments.category;
 
 import android.content.Context;
 import android.graphics.Color;
