@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +35,7 @@ import static ru.cs.cstaskclient.R.id.lvTasks;
  * Created by lithTech on 09.12.2016.
  */
 
-public class DiscussFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
+public class DiscussFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     ListView lvDiscuss;
     DiscussApi discussApi;
@@ -42,15 +44,20 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
     private long taskId;
     private boolean stopRefreshOnScroll = false;
 
+    View bSendMessage;
+    EditText etSendMessage;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_discuss, container, false);
 
         lvDiscuss = (ListView) view.findViewById(R.id.lvDiscuss);
-
         srlLoading = (SwipeRefreshLayout) view.findViewById(R.id.srlLoading);
+        etSendMessage = (EditText) view.findViewById(R.id.edEnterMessage);
+        bSendMessage = (View) view.findViewById(R.id.bSendMessage);
 
+        bSendMessage.setOnClickListener(this);
         srlLoading.setOnRefreshListener(this);
 
         resetDiscussRequest();
@@ -141,6 +148,30 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
                 lvDiscuss.setAdapter(new DiscussListAdapter(getActivity(), R.layout.list_discuss_item,
                         (List<Discuss>) o));
                 srlLoading.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.bSendMessage) {
+            if (etSendMessage.getText().length() > 0)
+                sendMessage(etSendMessage.getText().toString());
+        }
+    }
+
+    private void sendMessage(String s) {
+        discussApi.sendMessage(taskId, s).enqueue(new retrofit2.Callback<Discuss>() {
+            @Override
+            public void onResponse(Call<Discuss> call, Response<Discuss> response) {
+                DiscussListAdapter adapter = (DiscussListAdapter) lvDiscuss.getAdapter();
+                adapter.add(response.body());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Discuss> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }

@@ -22,4 +22,5 @@
     <string name="button_ok">OK</string>
     <string name="error_api_operation">Ошибка операции. Возможно, проблемы с сервером. Повторите операцию позже</string>
     <string name="api_operation_status">Статус операции:</string>
+    <string name="enter_text">Введите сообщение</string>
 </resources>
