@@ -24,4 +24,5 @@
     <string name="api_operation_status">Статус операции:</string>
     <string name="enter_text">Введите сообщение</string>
     <string name="lastActivity">Последние сообщения</string>
+    <string name="dialog_worktime">Укажите время (часов) и описание работ</string>
 </resources>

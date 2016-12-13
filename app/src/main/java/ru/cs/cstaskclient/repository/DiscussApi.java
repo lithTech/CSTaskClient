@@ -1,5 +1,8 @@
 package ru.cs.cstaskclient.repository;
 
+import android.util.TypedValue;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -24,6 +27,6 @@ public interface DiscussApi {
     @Multipart
     @POST("/discusses")
     public Call<Discuss> sendMessage(@Part("taskId") long taskId,
-                               @Part("message") String message);
+                               @Part("message") RequestBody message);
 
 }

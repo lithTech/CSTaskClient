@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import ru.cs.cstaskclient.Const;
@@ -23,6 +25,7 @@ import ru.cs.cstaskclient.dto.Discuss;
 import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.GridQueryResultDiscuss;
 import ru.cs.cstaskclient.dto.GridQueryResultTask;
+import ru.cs.cstaskclient.dto.GridSortDir;
 import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.fragments.tasks.TaskListAdapter;
 import ru.cs.cstaskclient.repository.ApiManager;
@@ -78,7 +81,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
     }
 
     public void resetDiscussRequest() {
-        listDiscussRequest = new GridQueryRequest();
+        listDiscussRequest = GridQueryRequest.getSimple(GridQueryRequest.class, "createdDate", GridSortDir.desc);
         listDiscussRequest.page = 1;
         listDiscussRequest.take = 15;
         listDiscussRequest.pageSize = 15;
@@ -155,17 +158,25 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.bSendMessage) {
-            if (etSendMessage.getText().length() > 0)
-                sendMessage(etSendMessage.getText().toString());
+            if (etSendMessage.getText().length() > 0) {
+                sendMessage(etSendMessage.getText().toString(), new Callback() {
+                    @Override
+                    public void done(Object o) {
+                        etSendMessage.setText("");
+                    }
+                });
+            }
         }
     }
 
-    private void sendMessage(String s) {
-        discussApi.sendMessage(taskId, s).enqueue(new retrofit2.Callback<Discuss>() {
+    private void sendMessage(String s, final Callback callback) {
+        RequestBody textBody = RequestBody.create(null, s.replaceAll("\n", "<br />"));
+        discussApi.sendMessage(taskId, textBody).enqueue(new retrofit2.Callback<Discuss>() {
             @Override
             public void onResponse(Call<Discuss> call, Response<Discuss> response) {
+                callback.done(response.body());
                 DiscussListAdapter adapter = (DiscussListAdapter) lvDiscuss.getAdapter();
-                adapter.add(response.body());
+                adapter.insert(response.body(), 0);
                 adapter.notifyDataSetChanged();
             }
 
