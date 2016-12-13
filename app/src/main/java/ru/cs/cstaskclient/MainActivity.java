@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.cs.cstaskclient.dto.SessionUser;
+import ru.cs.cstaskclient.fragments.lastactivity.LastActivityFragment;
 import ru.cs.cstaskclient.fragments.project.ProjectViewFragment;
 import ru.cs.cstaskclient.fragments.worktime.WorkTimeViewFragment;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         actionBarDrawerToggle.syncState();
 
-        selectMenuItem(R.id.actWorkTime, getString(R.string.workTime));
+        selectMenuItem(R.id.actLastActivity, getString(R.string.lastActivity));
 
         View headerView = navigationView.getHeaderView(0);
         TextView loggedMail = (TextView) headerView.findViewById(R.id.tvGlobalEmail);
@@ -105,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.actWorkTime) {
             frClass = WorkTimeViewFragment.class;
+        }
+        else if (id == R.id.actLastActivity) {
+            frClass = LastActivityFragment.class;
         }
         else return false;
 

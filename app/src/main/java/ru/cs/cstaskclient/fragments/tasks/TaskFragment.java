@@ -21,8 +21,10 @@ import retrofit2.Response;
 import ru.cs.cstaskclient.Const;
 import ru.cs.cstaskclient.MainActivity;
 import ru.cs.cstaskclient.R;
+import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.GridQueryRequestTask;
 import ru.cs.cstaskclient.dto.GridQueryResultTask;
+import ru.cs.cstaskclient.dto.GridSortDir;
 import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
@@ -53,6 +55,8 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
 
         srlLoading = (SwipeRefreshLayout) view.findViewById(R.id.srlLoading);
 
+        resetListRequest();
+
         onRefresh();
 
         lvTasks.setOnScrollListener(this);
@@ -69,11 +73,12 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listRequestCurrent = new GridQueryRequestTask();
         categoryId = getArguments().getLong(Const.ARG_TASK_CATEGORY_ID, 0);
     }
 
     public void resetListRequest() {
+        listRequestCurrent = GridQueryRequest.getSimple(GridQueryRequestTask.class, "createdDate",
+                GridSortDir.desc);
         listRequestCurrent.parentId = categoryId;
         listRequestCurrent.page = 1;
         listRequestCurrent.pageSize = 15;
@@ -158,7 +163,7 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
             fragment.setArguments(new Bundle());
             fragment.getArguments().putLong(Const.ARG_TASK_ID, task.id);
 
-            ((MainActivity) getActivity()).loadFragment(task.title, fragment);
+            ((MainActivity) getActivity()).loadFragment("#"+task.vid+" "+task.title, fragment);
         }
     }
 }

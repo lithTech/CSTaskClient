@@ -55,6 +55,9 @@ public class ApiManager {
     public static UserApi getUserApi() {
         return getRetrofit(jsonFactory).create(UserApi.class);
     }
+    public static LastActivityApi getLastActivityApi() {
+        return getRetrofit(jsonFactory).create(LastActivityApi.class);
+    }
 
     @NonNull
     public static Retrofit getRetrofit(Converter.Factory converterFactory) {

@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void fetchUserInfo(String login, final ru.cs.cstaskclient.util.Callback onSuccess) {
         Call<GridQueryResultUsers> usersCall = ApiManager.getUserApi()
-                .findUsers(GridQueryRequest.getSimple("login", "eq", login));
+                .findUsers(GridQueryRequest.getSimple(GridQueryRequest.class, "login", "eq", login));
         final Activity thisActivity = this;
         usersCall.enqueue(new Callback<GridQueryResultUsers>() {
             @Override

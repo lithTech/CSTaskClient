@@ -25,4 +25,5 @@
     <string name="error_api_operation">Operation failed, the server may be down. Please, try again soon</string>
     <string name="api_operation_status">Operation status:</string>
     <string name="enter_text">Input your message</string>
+    <string name="lastActivity">Last Activity</string>
 </resources>
