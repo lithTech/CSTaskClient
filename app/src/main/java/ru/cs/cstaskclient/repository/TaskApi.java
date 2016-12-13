@@ -18,4 +18,6 @@ public interface TaskApi {
     @POST("/ui/grid/ProjectCategoryTask/data")
     public Call<GridQueryResultTask> getTasks(@Body GridQueryRequestTask request);
 
+    @GET("/tasks/favorite")
+    public Call<GridQueryResultTask> getFavoriteTasks();
 }

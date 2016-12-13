@@ -26,4 +26,5 @@
     <string name="api_operation_status">Operation status:</string>
     <string name="enter_text">Input your message</string>
     <string name="lastActivity">Last Activity</string>
+    <string name="action_add_task">New task</string>
 </resources>

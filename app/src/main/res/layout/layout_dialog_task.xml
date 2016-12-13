@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/appBar"
+        layout="@layout/layout_ui_app_bar"
+        />
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="5dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <AutoCompleteTextView
+                android:id="@+id/etProject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Project"
+                android:maxLines="1"
+                android:text=""
+                />
+            <AutoCompleteTextView
+                android:id="@+id/etCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category"
+                android:maxLines="1"
+                android:text=""
+                />
+            <EditText
+                android:id="@+id/etTitle"
+                android:hint="Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <AutoCompleteTextView
+                android:id="@+id/etAssignee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Assignee"
+                android:maxLines="1"
+                android:text=""
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <DatePicker
+                    android:datePickerMode="spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                </DatePicker>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:layout_weight="0.5"
+                    android:hint="Start date"
+                    android:id="@+id/etStartDate" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:layout_weight="0.5"
+                    android:hint="Planned end date"
+                    android:id="@+id/etPlannedEndDate" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:layout_weight="0.5"
+                    android:ems="10"
+                    android:hint="Planned labor"
+                    android:id="@+id/etPlannedLabor" />
+                <AutoCompleteTextView
+                    android:id="@+id/etTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:hint="Tags"
+                    android:maxLines="1"
+                    android:text=""
+                    />
+            </LinearLayout>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:layout_weight="0"
+                android:lines="5"
+                android:hint="Description"
+                android:id="@+id/etDescr" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/bCreate"
+                    android:text="Create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
