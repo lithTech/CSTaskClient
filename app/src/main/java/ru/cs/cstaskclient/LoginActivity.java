@@ -84,6 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences(SettingsFragment.PREF_FILE, MODE_PRIVATE);
         mLoginView.setText(pref.getString(PREF_AUTH_LOGIN, ""));
         mPasswordView.setText(pref.getString(PREF_AUTH_PASSWORD, ""));
+
+        if (!TextUtils.isEmpty(mLoginView.getText().toString()) &&
+                !TextUtils.isEmpty(mPasswordView.getText().toString())) {
+            attemptLogin();
+        }
     }
 
     /**
