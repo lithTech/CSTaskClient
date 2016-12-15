@@ -23,34 +23,61 @@
             android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <AutoCompleteTextView
-                android:id="@+id/etProject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Project"
-                android:maxLines="1"
-                android:text=""
-                />
-            <AutoCompleteTextView
-                android:id="@+id/etCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Category"
-                android:maxLines="1"
-                android:text=""
-                />
             <EditText
                 android:id="@+id/etTitle"
                 android:hint="Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <AutoCompleteTextView
+            <ru.cs.cstaskclient.widget.InstantAutoComplete
+                android:id="@+id/etProject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Project"
+                android:inputType="textNoSuggestions"
+                android:ellipsize="middle"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:completionThreshold="1"
+                android:text=""
+                />
+            <ru.cs.cstaskclient.widget.InstantAutoComplete
+                android:id="@+id/etCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category"
+                android:inputType="textNoSuggestions"
+                android:ellipsize="middle"
+                android:completionThreshold="1"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:text=""
+                />
+
+            <ru.cs.cstaskclient.widget.InstantAutoComplete
+                android:id="@+id/etStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Status"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:completionThreshold="1"
+                android:text=""
+                />
+
+            <ru.cs.cstaskclient.widget.InstantAutoComplete
                 android:id="@+id/etAssignee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Assignee"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:completionThreshold="1"
                 android:text=""
                 />
 
@@ -58,14 +85,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <DatePicker
-                    android:datePickerMode="spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-
-                </DatePicker>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,13 +116,17 @@
                     android:ems="10"
                     android:hint="Planned labor"
                     android:id="@+id/etPlannedLabor" />
-                <AutoCompleteTextView
+                <ru.cs.cstaskclient.widget.InstantMultiAutoComplete
                     android:id="@+id/etTags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:hint="Tags"
+                    android:inputType="textNoSuggestions"
                     android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:completionThreshold="1"
                     android:text=""
                     />
             </LinearLayout>

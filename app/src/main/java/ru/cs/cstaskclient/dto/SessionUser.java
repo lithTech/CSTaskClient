@@ -13,6 +13,23 @@ public class SessionUser {
     public String fullName;
     public String email;
     public String avatarLink;
+    public String login;
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     public long getId() {
         return id;
