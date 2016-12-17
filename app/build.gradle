@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "ru.cs.cstaskclient"
         minSdkVersion 16
-        targetSdkVersion 18
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -16,6 +16,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        exclude 'libs/jackson-core-asl-1.9.13.jar'
+        exclude 'libs/jackson-mapper-asl-1.9.13.jar'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 }
 

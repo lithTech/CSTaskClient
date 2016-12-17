@@ -3,7 +3,7 @@ package ru.cs.cstaskclient.widget;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.text.TextUtils;
+import android.os.Build;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -13,33 +13,37 @@ import java.util.TimeZone;
 
 public class EditTextDatePicker implements View.OnClickListener, DatePickerDialog.OnDateSetListener, View.OnFocusChangeListener {
 
-    EditText _editText;
-    private int _day;
-    private int _month;
-    private int _year;
-    private Context _context;
+    EditText editText;
+    private int day;
+    private int month;
+    private int year;
+    private Context context;
 
     public EditText getEditText() {
-        return _editText;
+        return editText;
     }
 
     public void setEditText(EditText _editText) {
-        this._editText = _editText;
+        this.editText = _editText;
     }
 
     public EditTextDatePicker(Context context, EditText editText) {
         Activity act = (Activity) context;
-        this._editText = editText;
-        this._editText.setOnClickListener(this);
-        this._editText.setOnFocusChangeListener(this);
-        this._context = context;
+        this.editText = editText;
+        this.editText.setOnClickListener(this);
+        this.editText.setOnFocusChangeListener(this);
+        this.context = context;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.editText.setShowSoftInputOnFocus(false);
+        }
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        _year = year;
-        _month = monthOfYear;
-        _day = dayOfMonth;
+        this.year = year;
+        month = monthOfYear;
+        day = dayOfMonth;
         updateDisplay();
     }
 
@@ -47,7 +51,7 @@ public class EditTextDatePicker implements View.OnClickListener, DatePickerDialo
     public void onClick(View v) {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
-        DatePickerDialog dialog = new DatePickerDialog(_context, this,
+        DatePickerDialog dialog = new DatePickerDialog(context, this,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
@@ -55,12 +59,12 @@ public class EditTextDatePicker implements View.OnClickListener, DatePickerDialo
 
     private void updateDisplay() {
         String daypad = "0";
-        if (_day > 9)
+        if (day > 9)
             daypad = "";
-        _editText.setText(new StringBuilder()
-                .append(daypad).append(_day)
-                .append(".").append(_month + 1)
-                .append(".").append(_year));
+        editText.setText(new StringBuilder()
+                .append(daypad).append(day)
+                .append(".").append(month + 1)
+                .append(".").append(year));
     }
 
     @Override

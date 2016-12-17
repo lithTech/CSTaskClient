@@ -61,12 +61,12 @@ public class ApiManager {
 
     @NonNull
     public static Retrofit getRetrofit(Converter.Factory converterFactory) {
-        Interceptor logInterceptor = new HttpLoggingInterceptor();
-        ((HttpLoggingInterceptor) logInterceptor).setLevel(HttpLoggingInterceptor.Level.BODY);
+        //Interceptor logInterceptor = new HttpLoggingInterceptor();
+        //((HttpLoggingInterceptor) logInterceptor).setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new CookieInterceptor())
                 .addInterceptor(new ReceiveCookiesInterceptor())
-                .addInterceptor(logInterceptor)
+        //        .addInterceptor(logInterceptor)
                 .build();
         Retrofit.Builder rb = new Retrofit.Builder()
                 .baseUrl(API_URL)
