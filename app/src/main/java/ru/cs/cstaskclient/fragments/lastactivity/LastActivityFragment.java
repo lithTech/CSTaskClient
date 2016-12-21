@@ -23,6 +23,7 @@ import ru.cs.cstaskclient.dto.GridSortDir;
 import ru.cs.cstaskclient.dto.LastActivityMessage;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.LastActivityApi;
+import ru.cs.cstaskclient.util.ApiCall;
 import ru.cs.cstaskclient.util.Callback;
 
 /**
@@ -73,17 +74,16 @@ public class LastActivityFragment extends Fragment implements AbsListView.OnScro
 
     public void updateData(GridQueryRequest request, final Callback callback) {
         Call<GridQueryResultLastActivity> call = lastActivityApi.getLastActivity(request);
-        call.enqueue(new retrofit2.Callback<GridQueryResultLastActivity>() {
+        call.enqueue(new ApiCall<GridQueryResultLastActivity>(getActivity()) {
             @Override
-            public void onResponse(Call<GridQueryResultLastActivity> call, Response<GridQueryResultLastActivity> response) {
+            public void onResponse(Response<GridQueryResultLastActivity> response) {
                 callback.done(response.body().data);
             }
 
             @Override
             public void onFailure(Call<GridQueryResultLastActivity> call, Throwable t) {
+                super.onFailure(call, t);
                 srlLoading.setRefreshing(false);
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG);
             }
         });
     }

@@ -29,6 +29,7 @@ import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.CategoryApi;
 import ru.cs.cstaskclient.repository.ProjectApi;
+import ru.cs.cstaskclient.util.ApiCall;
 
 /**
  * Created by lithTech on 06.12.2016.
@@ -56,9 +57,9 @@ public class ProjectViewFragment extends Fragment implements AdapterView.OnItemC
 
     public void updateProjectData(final ListView listView) {
         Call<List<Project>> projects = projectApi.getProjects("progress");
-        projects.enqueue(new Callback<List<Project>>() {
+        projects.enqueue(new ApiCall<List<Project>>(getActivity()) {
             @Override
-            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+            public void onResponse(Response<List<Project>> response) {
                 Collections.sort(response.body(), new Comparator<Project>() {
                     @Override
                     public int compare(Project t1, Project t2) {
@@ -66,12 +67,6 @@ public class ProjectViewFragment extends Fragment implements AdapterView.OnItemC
                     }
                 });
                 listView.setAdapter(new ProjectListAdapter(getActivity(), response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<List<Project>> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG).show();
             }
         });
     }

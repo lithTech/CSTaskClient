@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import ru.cs.cstaskclient.dto.Category;
 import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.CategoryApi;
+import ru.cs.cstaskclient.repository.ProjectApi;
+import ru.cs.cstaskclient.util.ApiCall;
 
 /**
  * Created by lithTech on 12.12.2016.
@@ -30,6 +33,7 @@ import ru.cs.cstaskclient.repository.CategoryApi;
 public class CategoryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private CategoryApi categoryApi;
+    private ProjectApi projectApi;
     private ListView lvCategories;
     private long projectId;
 
@@ -39,6 +43,7 @@ public class CategoryFragment extends Fragment implements AdapterView.OnItemClic
         View view = inflater.inflate(R.layout.layout_fragment_categories, container, false);
 
         categoryApi = ApiManager.getCategoryApi();
+        projectApi = ApiManager.getProjectApi();
 
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
 
@@ -63,18 +68,12 @@ public class CategoryFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     public void updateCategoryData(long projectId, long catId, final ru.cs.cstaskclient.util.Callback callback) {
-        Call<List<Category>> categories = categoryApi.getCategory(projectId, catId);
-        categories.enqueue(new Callback<List<Category>>() {
+        Call<List<Category>> catCall = projectApi.getCategories(projectId);
+        catCall.enqueue(new ApiCall<List<Category>>(getActivity()) {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Response<List<Category>> response) {
                 lvCategories.setAdapter(new CategoryAdapter(getActivity(), response.body()));
                 callback.done(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG).show();
             }
         });
     }

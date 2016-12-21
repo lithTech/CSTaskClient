@@ -30,6 +30,7 @@ import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.fragments.tasks.TaskListAdapter;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.DiscussApi;
+import ru.cs.cstaskclient.util.ApiCall;
 import ru.cs.cstaskclient.util.Callback;
 
 import static ru.cs.cstaskclient.R.id.lvTasks;
@@ -90,17 +91,16 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
     public void updateData(GridQueryRequest request, long taskId, final Callback callback) {
         Call<GridQueryResultDiscuss> discussCall = discussApi.getDiscuss(taskId, request);
-        discussCall.enqueue(new retrofit2.Callback<GridQueryResultDiscuss>() {
+        discussCall.enqueue(new ApiCall<GridQueryResultDiscuss>(getActivity()) {
             @Override
-            public void onResponse(Call<GridQueryResultDiscuss> call, Response<GridQueryResultDiscuss> response) {
+            public void onResponse(Response<GridQueryResultDiscuss> response) {
                 callback.done(response.body().data);
             }
 
             @Override
             public void onFailure(Call<GridQueryResultDiscuss> call, Throwable t) {
+                super.onFailure(call, t);
                 srlLoading.setRefreshing(false);
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG);
             }
         });
     }

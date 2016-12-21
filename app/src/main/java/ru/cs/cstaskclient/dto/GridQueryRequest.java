@@ -42,9 +42,7 @@ public class GridQueryRequest {
                                                            String sortField, GridSortDir sortDir) {
         T r = getSimple(tClass, field, operator, value);
 
-        GridSort e = new GridSort();
-        e.field = sortField;
-        e.dir = sortDir;
+        GridSort e = new GridSort(sortField, sortDir);
 
         r.sort.add(e);
 
@@ -61,9 +59,7 @@ public class GridQueryRequest {
             e.printStackTrace();
         }
 
-        GridSort e = new GridSort();
-        e.field = sortField;
-        e.dir = sortDir;
+        GridSort e = new GridSort(sortField, sortDir);
 
         r.sort.add(e);
 

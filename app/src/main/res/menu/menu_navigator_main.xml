@@ -17,5 +17,10 @@
             android:checked="false"
             android:icon="@drawable/ic_folder"
             android:title="@string/projects" />
+        <item
+            android:id="@+id/actAssignedTasks"
+            android:checked="false"
+            android:icon="@drawable/ic_worker"
+            android:title="@string/assignedTasks" />
     </group>
 </menu>

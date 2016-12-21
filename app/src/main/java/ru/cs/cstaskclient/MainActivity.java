@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.cs.cstaskclient.dto.SessionUser;
+import ru.cs.cstaskclient.fragments.assigned.AssignedTaskFragment;
 import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.fragments.lastactivity.LastActivityFragment;
 import ru.cs.cstaskclient.fragments.project.ProjectViewFragment;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Const.RESULT_TASK_CREATED) {
+        if (requestCode == Const.RESULT_TASK_CREATED && data != null) {
             String title = data.getStringExtra(Const.ARG_TASK_TITLE);
             long id = data.getLongExtra(Const.ARG_TASK_ID, -1);
             DiscussFragment discussFragment = new DiscussFragment();
@@ -142,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.actLastActivity) {
             frClass = LastActivityFragment.class;
+        }
+        else if (id == R.id.actAssignedTasks) {
+            frClass = AssignedTaskFragment.class;
         }
         else return false;
 

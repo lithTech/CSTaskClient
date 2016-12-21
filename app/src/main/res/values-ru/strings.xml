@@ -21,7 +21,7 @@
     <string name="worktimeDescr">Описание работ</string>
     <string name="button_ok">OK</string>
     <string name="error_api_operation">Ошибка операции. Возможно, проблемы с сервером. Повторите операцию позже</string>
-    <string name="api_operation_status">Статус операции:</string>
+    <string name="work_time_status_done">Рабочие часы сохранены успешно</string>
     <string name="enter_text">Введите сообщение</string>
     <string name="lastActivity">Последние сообщения</string>
     <string name="dialog_worktime">Укажите время (часов) и описание работ</string>
@@ -39,4 +39,6 @@
     <string name="create">Создать</string>
     <string name="openNewTask">Открыть задачу</string>
     <string name="new_task_is_created_alert">Создана новая задача. Вы хотите перейти в ее обсуждения?</string>
+    <string name="select_assignee_to_view_tasks">Выберите исполнителя для просмотра его задач</string>
+    <string name="assignedTasks">Назначенные задачи</string>
 </resources>

@@ -10,6 +10,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import ru.cs.cstaskclient.dto.GridQueryRequestAssignedTask;
 import ru.cs.cstaskclient.dto.GridQueryRequestTask;
 import ru.cs.cstaskclient.dto.GridQueryResultTask;
 import ru.cs.cstaskclient.dto.Tag;
@@ -39,4 +40,7 @@ public interface TaskApi {
     @POST("/tasks")
     public Call<Task> create(@FieldMap Map<String, Object> request,
                              @Field("tagIds") List<Long> tagIds);
+
+    @POST("/ui/grid/ProjectCategoryTask/data")
+    public Call<GridQueryResultTask> getAssignedTasks(@Body GridQueryRequestAssignedTask request);
 }

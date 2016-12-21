@@ -17,11 +17,8 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import ru.cs.cstaskclient.R;
 import ru.cs.cstaskclient.dto.SessionUser;
@@ -29,6 +26,7 @@ import ru.cs.cstaskclient.dto.WorkTime;
 import ru.cs.cstaskclient.dto.WorkTimeElem;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.WorkTimeApi;
+import ru.cs.cstaskclient.util.ApiCall;
 
 /**
  * Created by lithTech on 07.12.2016.
@@ -57,16 +55,10 @@ public class WorkTimeViewFragment extends Fragment implements AdapterView.OnItem
 
     public void updateData() {
         Call<WorkTime> tasksCall = workTimeApi.getTasks();
-        tasksCall.enqueue(new Callback<WorkTime>() {
+        tasksCall.enqueue(new ApiCall<WorkTime>(getActivity()) {
             @Override
-            public void onResponse(Call<WorkTime> call, Response<WorkTime> response) {
+            public void onResponse(Response<WorkTime> response) {
                 lvWorkTime.setAdapter(new WorkTimeListAdapter(getActivity(), response.body().workTimes));
-            }
-
-            @Override
-            public void onFailure(Call<WorkTime> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG);
             }
         });
     }
@@ -116,19 +108,13 @@ public class WorkTimeViewFragment extends Fragment implements AdapterView.OnItem
             call = workTimeApi.updateWorkTime(description, hour, "HOUR", SessionUser.CURRENT.id,
                     wt.workTimeDTO.taskId, wt.workTimeDTO.id, wt.workTimeDTO.id);
         final Activity activity = getActivity();
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new ApiCall<ResponseBody>(getActivity()) {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Response<ResponseBody> response) {
                 Toast.makeText(activity,
-                        activity.getString(R.string.api_operation_status) + response.message(),
+                        activity.getString(R.string.work_time_status_done),
                         Toast.LENGTH_LONG).show();
                 updateData();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(activity, activity.getString(R.string.error_api_operation),
-                        Toast.LENGTH_LONG).show();
             }
         });
     }

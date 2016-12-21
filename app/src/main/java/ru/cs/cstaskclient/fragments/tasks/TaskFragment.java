@@ -29,6 +29,7 @@ import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.TaskApi;
+import ru.cs.cstaskclient.util.ApiCall;
 
 /**
  * Created by lithTech on 08.12.2016.
@@ -90,18 +91,17 @@ public class TaskFragment  extends Fragment implements AbsListView.OnScrollListe
                            final ru.cs.cstaskclient.util.Callback callback) {
         srlLoading.setRefreshing(true);
         Call<GridQueryResultTask> tasksCall = taskApi.getTasks(request);
-        tasksCall.enqueue(new Callback<GridQueryResultTask>() {
+        tasksCall.enqueue(new ApiCall<GridQueryResultTask>(getActivity()) {
             @Override
-            public void onResponse(Call<GridQueryResultTask> call, Response<GridQueryResultTask> response) {
+            public void onResponse(Response<GridQueryResultTask> response) {
                 srlLoading.setRefreshing(false);
                 callback.done(response.body().data);
             }
 
             @Override
             public void onFailure(Call<GridQueryResultTask> call, Throwable t) {
+                super.onFailure(call, t);
                 srlLoading.setRefreshing(false);
-                t.printStackTrace();
-                Toast.makeText(getActivity(), R.string.error_network, Toast.LENGTH_LONG);
             }
         });
     }

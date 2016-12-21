@@ -23,7 +23,7 @@
     <string name="button_ok">OK</string>
     <string name="dialog_worktime">Specify Work description and time</string>
     <string name="error_api_operation">Operation failed, the server may be down. Please, try again soon</string>
-    <string name="api_operation_status">Operation status:</string>
+    <string name="work_time_status_done">Operation status:</string>
     <string name="enter_text">Input your message</string>
     <string name="lastActivity">Last Activity</string>
     <string name="action_add_task">New task</string>
@@ -40,4 +40,6 @@
     <string name="create">Create</string>
     <string name="openNewTask">Open new task</string>
     <string name="new_task_is_created_alert">New task is created. Would you like to open task\'s discussion?</string>
+    <string name="select_assignee_to_view_tasks">Select assignee to view tasks</string>
+    <string name="assignedTasks">Assigned Tasks</string>
 </resources>

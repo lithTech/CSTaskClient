@@ -9,4 +9,9 @@ import java.util.List;
 public class GridSort {
     public String field;
     public GridSortDir dir;
+
+    public GridSort(String field, GridSortDir dir) {
+        this.field = field;
+        this.dir = dir;
+    }
 }

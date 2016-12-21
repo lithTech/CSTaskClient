@@ -7,8 +7,15 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tvCategory"
+        android:text="Hello from category!"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:textColor="#FBFBFB"
+        android:shadowColor="#7F000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        />
 </LinearLayout>
