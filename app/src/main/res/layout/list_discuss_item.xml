@@ -41,6 +41,7 @@
     <LinearLayout
         android:background="@drawable/sh_transparentbox"
         android:gravity="top"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -53,7 +54,11 @@
             android:id="@+id/tvMessageFileList"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:maxLines="3"
+            android:drawableLeft="@drawable/ic_attachment"
+            android:drawableTint="@color/colorAccent"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:maxLines="5"
+            android:text="File1.txt\nFile2.txr\nfdfdf.txt\n54545.f"
             android:ellipsize="middle"
             android:layout_height="wrap_content" />
     </LinearLayout>

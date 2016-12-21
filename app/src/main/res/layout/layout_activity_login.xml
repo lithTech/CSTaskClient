@@ -78,7 +78,7 @@
                     android:textStyle="bold"/>
 
                 <ProgressBar
-                    android:id="@+id/login_progress"
+                    android:id="@+id/progress"
                     android:layout_gravity="center_horizontal"
                     style="?android:attr/progressBarStyleLarge"
                     android:layout_width="wrap_content"

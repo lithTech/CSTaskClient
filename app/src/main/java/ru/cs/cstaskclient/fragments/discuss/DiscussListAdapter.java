@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,11 @@ public class DiscussListAdapter extends ArrayAdapter<Discuss> {
 
         TextView tvAuthor = (TextView) convertView.findViewById(R.id.tvMessageAuthor);
         tvAuthor.setText(discuss.creatorFullName);
+
+        TextView files = (TextView) convertView.findViewById(R.id.tvMessageFileList);
+        files.setVisibility(discuss.files == null || discuss.files.isEmpty() ? View.GONE : View.VISIBLE);
+        if (discuss.files != null)
+            files.setText(TextUtils.join("\n", discuss.files));
 
         tvMessage.setText(Html.fromHtml(discuss.message, new Html.ImageGetter() {
             @Override

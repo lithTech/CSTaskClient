@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -28,7 +27,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.cs.cstaskclient.dto.GridQueryRequest;
-import ru.cs.cstaskclient.dto.GridQueryResult;
 import ru.cs.cstaskclient.dto.GridQueryResultUsers;
 import ru.cs.cstaskclient.dto.SessionUser;
 import ru.cs.cstaskclient.fragments.SettingsFragment;
@@ -79,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mLoginFormView = findViewById(R.id.card_view);
-        mProgressView = findViewById(R.id.login_progress);
+        mProgressView = findViewById(R.id.progress);
 
         SharedPreferences pref = getSharedPreferences(SettingsFragment.PREF_FILE, MODE_PRIVATE);
         mLoginView.setText(pref.getString(PREF_AUTH_LOGIN, ""));
@@ -190,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         findViewById(R.id.email_sign_in_button).setVisibility(show?View.GONE:View.VISIBLE);
-        findViewById(R.id.login_progress).setVisibility(show?View.VISIBLE:View.GONE);
+        findViewById(R.id.progress).setVisibility(show?View.VISIBLE:View.GONE);
     }
 
     public void fetchUserInfo(String login, final ru.cs.cstaskclient.util.Callback onSuccess) {

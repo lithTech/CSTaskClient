@@ -21,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.cs.cstaskclient.dto.SessionUser;
+import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.fragments.lastactivity.LastActivityFragment;
 import ru.cs.cstaskclient.fragments.project.ProjectViewFragment;
+import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.fragments.worktime.WorkTimeViewFragment;
 
 /**
@@ -92,11 +94,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Const.RESULT_TASK_CREATED) {
+            String title = data.getStringExtra(Const.ARG_TASK_TITLE);
+            long id = data.getLongExtra(Const.ARG_TASK_ID, -1);
+            DiscussFragment discussFragment = new DiscussFragment();
+            discussFragment.setArguments(new Bundle());
+            discussFragment.getArguments().putLong(Const.ARG_TASK_ID, id);
+
+            loadFragment(title, discussFragment);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.actAddTask) {
             Intent intent = new Intent(this, TaskCreateActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, Const.RESULT_TASK_CREATED);
         }
         return true;
     }
@@ -151,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .addToBackStack(title)
-                .commit();
+                .commitAllowingStateLoss();
 
         Bundle args = fragment.getArguments();
         if (args == null) {

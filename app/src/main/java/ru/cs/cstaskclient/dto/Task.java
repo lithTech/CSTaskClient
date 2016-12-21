@@ -1,5 +1,7 @@
 package ru.cs.cstaskclient.dto;
 
+import java.util.List;
+
 /**
  * Created by lithTech on 08.12.2016.
  */
@@ -17,6 +19,14 @@ public class Task extends BaseDTO {
     public String creatorFullName;
 
     public int progress;
+
+    public String getCreatorFullName() {
+        return creatorFullName;
+    }
+
+    public void setCreatorFullName(String creatorFullName) {
+        this.creatorFullName = creatorFullName;
+    }
 
     public String getVid() {
         return vid;

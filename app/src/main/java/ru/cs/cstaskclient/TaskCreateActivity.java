@@ -1,6 +1,8 @@
 package ru.cs.cstaskclient;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -8,9 +10,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -23,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +49,7 @@ import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.dto.TaskCreateRequest;
 import ru.cs.cstaskclient.dto.TaskStatus;
 import ru.cs.cstaskclient.dto.User;
+import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.ProjectApi;
 import ru.cs.cstaskclient.repository.TaskApi;
@@ -81,7 +87,6 @@ public class TaskCreateActivity extends AppCompatActivity implements AdapterView
     Map<String, String> userMap = new HashMap<>();
     Map<String, String> statusMap = new HashMap<>();
     Map<String, Long> tagsMap = new HashMap<>();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -239,6 +244,10 @@ public class TaskCreateActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onClick(View view) {
         if (validate()) {
+            final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
+            bCreate.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+
             Map<String, Object> req = new HashMap<>();
             req.put("assigneeUserLogin", userMap.get(tvAssignee.getText().toString()));
             req.put("categoryId", categoryMap.get(tvCategory.getText().toString()));
@@ -265,13 +274,43 @@ public class TaskCreateActivity extends AppCompatActivity implements AdapterView
             crCall.enqueue(new ApiCall<Task>(this) {
                 @Override
                 public void onResponse(Response<Task> r) {
+                    progressBar.setVisibility(View.GONE);
+                    bCreate.setVisibility(View.VISIBLE);
+
                     Toast.makeText(activity,
                             activity.getString(R.string.alert_task_created)+" #" +
                                     r.body().vid, Toast.LENGTH_LONG).show();
-                    activity.finish();
+
+                    showOpenTaskDialog(r.body());
+                }
+
+                @Override
+                public void onFailure(Call<Task> call, Throwable t) {
+                    super.onFailure(call, t);
+                    progressBar.setVisibility(View.GONE);
+                    bCreate.setVisibility(View.VISIBLE);
                 }
             });
         }
+    }
+
+    private void showOpenTaskDialog(final Task task) {
+        final Activity thisAct = this;
+        AlertDialog ad = new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setView(R.layout.dialog_task_open)
+                .setPositiveButton(R.string.openNewTask, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Const.ARG_TASK_ID, task.id);
+                        intent.putExtra(Const.ARG_TASK_TITLE, "#" + task.vid + " " + task.title);
+                        setResult(Const.RESULT_TASK_CREATED, intent);
+                        thisAct.finish();
+                    }
+                })
+                .create();
+        ad.show();
     }
 
     private boolean validate() {
