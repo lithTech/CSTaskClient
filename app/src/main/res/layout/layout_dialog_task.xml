@@ -114,7 +114,7 @@
                     android:inputType="text"
                     android:layout_weight="0.5"
                     android:ems="10"
-                    android:hint="Planned labor"
+                    android:hint="@string/planned_labor"
                     android:id="@+id/etPlannedLabor" />
                 <ru.cs.cstaskclient.widget.InstantMultiAutoComplete
                     android:id="@+id/etTags"

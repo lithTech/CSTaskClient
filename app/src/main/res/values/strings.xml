@@ -42,4 +42,5 @@
     <string name="new_task_is_created_alert">New task is created. Would you like to open task\'s discussion?</string>
     <string name="select_assignee_to_view_tasks">Select assignee to view tasks</string>
     <string name="assignedTasks">Assigned Tasks</string>
+    <string name="planned_labor">Planned labor</string>
 </resources>

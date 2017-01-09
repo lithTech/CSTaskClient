@@ -41,4 +41,5 @@
     <string name="new_task_is_created_alert">Создана новая задача. Вы хотите перейти в ее обсуждения?</string>
     <string name="select_assignee_to_view_tasks">Выберите исполнителя для просмотра его задач</string>
     <string name="assignedTasks">Назначенные задачи</string>
+    <string name="planned_labor">Планов. труд.</string>
 </resources>
