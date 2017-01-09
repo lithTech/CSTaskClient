@@ -46,6 +46,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
     GridQueryRequest listDiscussRequest;
     SwipeRefreshLayout srlLoading;
     private long taskId;
+    private long msgId;
     private boolean stopRefreshOnScroll = false;
 
     View bSendMessage;
@@ -79,6 +80,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
         discussApi = ApiManager.getDiscussApi();
         taskId = getArguments().getLong(Const.ARG_TASK_ID);
+        msgId = getArguments().getLong(Const.ARG_MSG_ID);
     }
 
     public void resetDiscussRequest() {
@@ -119,12 +121,12 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
             if(srlLoading.isRefreshing() == false)
             {
                 srlLoading.setRefreshing(true);
-                loadMoreTasks();
+                loadMoreTasks(null);
             }
         }
     }
 
-    private void loadMoreTasks() {
+    private void loadMoreTasks(@Nullable final Callback callback) {
         listDiscussRequest.page++;
         listDiscussRequest.skip += listDiscussRequest.pageSize;
         updateData(listDiscussRequest, taskId, new ru.cs.cstaskclient.util.Callback() {
@@ -137,9 +139,33 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
                 srlLoading.setRefreshing(false);
 
                 stopRefreshOnScroll = discusses.isEmpty();
+
+                if (callback != null)
+                    callback.done(discusses);
             }
         });
     }
+
+    Callback updateToMsgId = new Callback() {
+        @Override
+        public void done(Object o) {
+            List<Discuss> discusses = (List<Discuss>) o;
+            if (discusses == null || discusses.isEmpty())
+                return;
+            for (Discuss discuss : discusses) {
+                if (discuss.id == msgId) {
+                    DiscussListAdapter adapter = ((DiscussListAdapter) lvDiscuss.getAdapter());
+                    int pos = adapter.getPositionByMsgId(msgId);
+                    if (pos >= 0) {
+                        lvDiscuss.setSelection(pos);
+                    }
+                    return;
+                }
+
+            }
+            loadMoreTasks(this);
+        }
+    };
 
     @Override
     public void onRefresh() {
@@ -151,6 +177,9 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
                 lvDiscuss.setAdapter(new DiscussListAdapter(getActivity(), R.layout.list_discuss_item,
                         (List<Discuss>) o));
                 srlLoading.setRefreshing(false);
+
+                if (msgId > 0)
+                    updateToMsgId.done(o);
             }
         });
     }

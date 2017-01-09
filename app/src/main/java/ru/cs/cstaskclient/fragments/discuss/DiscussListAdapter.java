@@ -52,6 +52,14 @@ public class DiscussListAdapter extends ArrayAdapter<Discuss> {
 
     }
 
+    public int getPositionByMsgId(long msgId) {
+        for(int i = 0; i < getCount(); i++) {
+            if (getItem(i).id == msgId)
+                return i;
+        }
+        return -1;
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,11 +18,14 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Response;
 import ru.cs.cstaskclient.Const;
+import ru.cs.cstaskclient.MainActivity;
 import ru.cs.cstaskclient.R;
 import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.GridQueryResultLastActivity;
 import ru.cs.cstaskclient.dto.GridSortDir;
 import ru.cs.cstaskclient.dto.LastActivityMessage;
+import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
+import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.LastActivityApi;
 import ru.cs.cstaskclient.util.ApiCall;
@@ -30,7 +35,7 @@ import ru.cs.cstaskclient.util.Callback;
  * Created by lithTech on 09.12.2016.
  */
 
-public class LastActivityFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener{
+public class LastActivityFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     ListView lvActivity;
     LastActivityApi lastActivityApi;
@@ -53,6 +58,8 @@ public class LastActivityFragment extends Fragment implements AbsListView.OnScro
         onRefresh();
 
         lvActivity.setOnScrollListener(this);
+
+        lvActivity.setOnItemClickListener(this);
 
         return view;
     }
@@ -139,4 +146,18 @@ public class LastActivityFragment extends Fragment implements AbsListView.OnScro
         });
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        LastActivityMessage msg = (LastActivityMessage) lvActivity.getItemAtPosition(i);
+        long taskId = msg.id;
+        long msgId = msg.msgId;
+
+        Bundle args = new Bundle();
+        args.putLong(Const.ARG_TASK_ID, taskId);
+        args.putLong(Const.ARG_MSG_ID, msgId);
+        DiscussFragment fragment = new DiscussFragment();
+        fragment.setArguments(args);
+
+        ((MainActivity) getActivity()).loadFragment(msg.title, fragment);
+    }
 }
