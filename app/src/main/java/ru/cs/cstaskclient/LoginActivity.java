@@ -32,8 +32,8 @@ import ru.cs.cstaskclient.dto.SessionUser;
 import ru.cs.cstaskclient.fragments.SettingsFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
 import ru.cs.cstaskclient.repository.AuthApi;
-import ru.cs.cstaskclient.repository.CookieInterceptor;
 import ru.cs.cstaskclient.repository.ReceiveCookiesInterceptor;
+import ru.cs.cstaskclient.repository.SessionCookieInterceptor;
 
 /**
  * A login screen that offers login via email/password.
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             jsessidCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    CookieInterceptor.setSessionCookie(ReceiveCookiesInterceptor.cookieToString());
+                    SessionCookieInterceptor.setSessionCookie(ReceiveCookiesInterceptor.cookieToString());
                     Call<String> auth = authApi.auth(login, password);
                     auth.enqueue(new Callback<String>() {
                         @Override

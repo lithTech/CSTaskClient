@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_above="@+id/cSendMessage"
         android:layout_height="wrap_content">
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/lvDiscuss"
             android:dividerHeight="0dp"
             android:divider="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </ListView>
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

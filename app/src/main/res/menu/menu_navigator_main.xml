@@ -3,6 +3,14 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/actGotoTask"
+            android:checked="false"
+            android:icon="@drawable/ic_num"
+            android:title="@string/action_move_to_task"
+            />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
             android:id="@+id/actLastActivity"
             android:checked="false"
             android:icon="@drawable/ic_message"

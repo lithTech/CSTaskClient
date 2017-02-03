@@ -1,5 +1,6 @@
 package ru.cs.cstaskclient;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,21 +13,37 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import ru.cs.cstaskclient.dto.GridFilter;
+import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.SessionUser;
+import ru.cs.cstaskclient.dto.Task;
 import ru.cs.cstaskclient.fragments.assigned.AssignedTaskFragment;
 import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.fragments.lastactivity.LastActivityFragment;
 import ru.cs.cstaskclient.fragments.project.ProjectViewFragment;
 import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.fragments.worktime.WorkTimeViewFragment;
+import ru.cs.cstaskclient.repository.ApiManager;
+import ru.cs.cstaskclient.repository.TaskApi;
+import ru.cs.cstaskclient.util.ApiCall;
 
 /**
  * Created by lithTech on 06.12.2016.
@@ -147,6 +164,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.actAssignedTasks) {
             frClass = AssignedTaskFragment.class;
         }
+        else if (id == R.id.actGotoTask){
+            gotoTask();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return false;
+        }
         else return false;
 
         try {
@@ -159,6 +181,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void gotoTask() {
+        View v = LayoutInflater.from(this).inflate(R.layout.dialog_task_goto, null, false);
+        final EditText etTaskNum = (EditText) v.findViewById(R.id.etTaskNumber);
+        AlertDialog.Builder ad = new AlertDialog.Builder(this).setCancelable(true)
+                .setTitle(R.string.action_move_to_task)
+                .setView(v)
+                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final String num = etTaskNum.getText().toString();
+                        if (TextUtils.isDigitsOnly(num)) {
+                            TaskApi taskApi = ApiManager.getTaskApi();
+                            GridQueryRequest req = GridQueryRequest.getSimple(GridQueryRequest.class,
+                                    "title", "contains", num);
+                            Call<List<Task>> call = taskApi.findTasks(req);
+                            call.enqueue(new ApiCall<List<Task>>(MainActivity.this) {
+                                @Override
+                                public void onResponse(Response<List<Task>> r) {
+                                    if (r.body().isEmpty()) return;
+                                    String title = r.body().get(0).title;
+                                    DiscussFragment discussFragment = new DiscussFragment();
+                                    Bundle args = new Bundle();
+                                    args.putLong(Const.ARG_TASK_ID, Integer.valueOf(num));
+                                    discussFragment.setArguments(args);
+                                    loadFragment(title, discussFragment);
+                                }
+                            });
+                        }
+                    }
+                });
+        final AlertDialog d = ad.show();
+        etTaskNum.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    d.getButton(DialogInterface.BUTTON_POSITIVE).callOnClick();
+                    d.dismiss();
+                }
+                return true;
+            }
+        });
     }
 
     public void loadFragment(String title, Fragment fragment) {

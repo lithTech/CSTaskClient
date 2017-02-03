@@ -1,47 +1,56 @@
 package ru.cs.cstaskclient.fragments.discuss;
 
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuAdapter;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.util.List;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import ru.cs.cstaskclient.Const;
 import ru.cs.cstaskclient.R;
 import ru.cs.cstaskclient.dto.Discuss;
+import ru.cs.cstaskclient.dto.File;
 import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.GridQueryResultDiscuss;
-import ru.cs.cstaskclient.dto.GridQueryResultTask;
 import ru.cs.cstaskclient.dto.GridSortDir;
-import ru.cs.cstaskclient.dto.Task;
-import ru.cs.cstaskclient.fragments.tasks.TaskListAdapter;
 import ru.cs.cstaskclient.repository.ApiManager;
+import ru.cs.cstaskclient.repository.SessionCookieInterceptor;
 import ru.cs.cstaskclient.repository.DiscussApi;
 import ru.cs.cstaskclient.util.ApiCall;
 import ru.cs.cstaskclient.util.Callback;
-
-import static ru.cs.cstaskclient.R.id.lvTasks;
 
 /**
  * Created by lithTech on 09.12.2016.
  */
 
-public class DiscussFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class DiscussFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, SwipeMenuListView.OnMenuItemClickListener {
 
-    ListView lvDiscuss;
+    SwipeMenuListView lvDiscuss;
     DiscussApi discussApi;
     GridQueryRequest listDiscussRequest;
     SwipeRefreshLayout srlLoading;
@@ -57,7 +66,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_discuss, container, false);
 
-        lvDiscuss = (ListView) view.findViewById(R.id.lvDiscuss);
+        lvDiscuss = (SwipeMenuListView) view.findViewById(R.id.lvDiscuss);
         srlLoading = (SwipeRefreshLayout) view.findViewById(R.id.srlLoading);
         etSendMessage = (EditText) view.findViewById(R.id.edEnterMessage);
         bSendMessage = (View) view.findViewById(R.id.bSendMessage);
@@ -71,7 +80,27 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
 
         lvDiscuss.setOnScrollListener(this);
 
+        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                SwipeMenuItem downloadFiles = new SwipeMenuItem(getActivity());
+                downloadFiles.setIcon(R.drawable.ic_download);
+                downloadFiles.setId(0);
+                downloadFiles.setTitle("some title");
+                downloadFiles.setWidth((int) dipToPixels(getActivity(), 64));
+                menu.addMenuItem(downloadFiles);
+            }
+        };
+
+        lvDiscuss.setMenuCreator(swipeMenuCreator);
+        lvDiscuss.setOnMenuItemClickListener(this);
+
         return view;
+    }
+
+    public static float dipToPixels(Context context, float dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
     @Override
@@ -126,6 +155,11 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
         }
     }
 
+    protected DiscussListAdapter getAdapter() {
+        SwipeMenuAdapter adapter = (SwipeMenuAdapter) lvDiscuss.getAdapter();
+        return (DiscussListAdapter) adapter.getWrappedAdapter();
+    }
+
     private void loadMoreTasks(@Nullable final Callback callback) {
         listDiscussRequest.page++;
         listDiscussRequest.skip += listDiscussRequest.pageSize;
@@ -133,7 +167,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
             @Override
             public void done(Object o) {
                 List<Discuss> discusses = (List<Discuss>) o;
-                DiscussListAdapter discussListAdapter = (DiscussListAdapter) lvDiscuss.getAdapter();
+                DiscussListAdapter discussListAdapter = getAdapter();
                 discussListAdapter.addAll(discusses);
                 discussListAdapter.notifyDataSetChanged();
                 srlLoading.setRefreshing(false);
@@ -154,7 +188,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
                 return;
             for (Discuss discuss : discusses) {
                 if (discuss.id == msgId) {
-                    DiscussListAdapter adapter = ((DiscussListAdapter) lvDiscuss.getAdapter());
+                    DiscussListAdapter adapter = getAdapter();
                     int pos = adapter.getPositionByMsgId(msgId);
                     if (pos >= 0) {
                         lvDiscuss.setSelection(pos);
@@ -204,7 +238,7 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
             @Override
             public void onResponse(Call<Discuss> call, Response<Discuss> response) {
                 callback.done(response.body());
-                DiscussListAdapter adapter = (DiscussListAdapter) lvDiscuss.getAdapter();
+                DiscussListAdapter adapter = getAdapter();
                 adapter.insert(response.body(), 0);
                 adapter.notifyDataSetChanged();
             }
@@ -214,5 +248,57 @@ public class DiscussFragment extends Fragment implements AbsListView.OnScrollLis
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+        switch (index) {
+            case 0:
+                Discuss d = getAdapter().getItem(position);
+                if (d.files != null && !d.files.isEmpty()) {
+                    if (d.files.size() > 1) {
+                        CharSequence[] files = new CharSequence[d.files.size()];
+                        final List<File> src = d.files;
+                        for (int i = 0; i < src.size(); i++) {
+                            File file = src.get(i);
+                            files[i] = file.getName();
+                        }
+                        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+                        ad.setItems(files, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startDownloading(src.get(i));
+                            }
+                        })
+                                .setTitle(R.string.chhose_file_to_download)
+                                .setCancelable(true)
+                                .show();
+                    }
+                    else startDownloading(d.files.get(0));
+
+                    return true;
+                }
+                break;
+            default:break;
+        }
+        return false;
+    }
+
+    public void startDownloading(File file) {
+        String url = ApiManager.API_URL + "/files/" + file.id;
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription(file.name);
+        request.setTitle(file.name);
+        request.addRequestHeader("Cookie", SessionCookieInterceptor.sessionCookie);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        }
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, file.name);
+
+        DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
+        Toast.makeText(getActivity(), R.string.download_start, Toast.LENGTH_LONG).show();
     }
 }

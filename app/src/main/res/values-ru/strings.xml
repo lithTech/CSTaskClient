@@ -42,4 +42,7 @@
     <string name="select_assignee_to_view_tasks">Выберите исполнителя для просмотра его задач</string>
     <string name="assignedTasks">Назначенные задачи</string>
     <string name="planned_labor">Планов. труд.</string>
+    <string name="action_move_to_task">Перейти к задаче по №</string>
+    <string name="download_start">Скачивание началось... Подробности по прогрессу скачивания см. в панели уведомлений</string>
+    <string name="chhose_file_to_download">Выберите файл, после чего начнется его загрузка</string>
 </resources>

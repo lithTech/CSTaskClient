@@ -64,7 +64,7 @@ public class ApiManager {
         //Interceptor logInterceptor = new HttpLoggingInterceptor();
         //((HttpLoggingInterceptor) logInterceptor).setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new CookieInterceptor())
+                .addInterceptor(new SessionCookieInterceptor())
                 .addInterceptor(new ReceiveCookiesInterceptor())
         //        .addInterceptor(logInterceptor)
                 .build();
