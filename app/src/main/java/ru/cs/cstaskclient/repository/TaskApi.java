@@ -10,6 +10,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import ru.cs.cstaskclient.dto.GridQueryRequest;
 import ru.cs.cstaskclient.dto.GridQueryRequestAssignedTask;
 import ru.cs.cstaskclient.dto.GridQueryRequestTask;
@@ -28,9 +29,6 @@ public interface TaskApi {
     @POST("/ui/grid/ProjectCategoryTask/data")
     public Call<GridQueryResultTask> getTasks(@Body GridQueryRequestTask request);
 
-    @GET("/tasks/favorite")
-    public Call<GridQueryResultTask> getFavoriteTasks();
-
     @GET("/tasks/statuses")
     public Call<List<TaskStatus>> getTaskStatuses();
 
@@ -47,4 +45,10 @@ public interface TaskApi {
 
     @POST("/ui/dataSource/Task/data")
     public Call<List<Task>> findTasks(@Body GridQueryRequest request);
+
+    @GET("/tasks/favorite")
+    public Call<List<Task>> getFavoriteTasks();
+
+    @POST("/tasks/{taskId}/favorite")
+    public Call addFavoriteTask(@Path("taskId") int taskId);
 }

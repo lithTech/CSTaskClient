@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                     auth.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
-                            if (response.body().contains("loginError"))
+                            if (response.body() == null || response.body().contains("loginError"))
                             {
                                 Toast.makeText(thisActivity, R.string.login_error, Toast.LENGTH_LONG).show();
                                 showProgress(false);
@@ -198,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
         usersCall.enqueue(new Callback<GridQueryResultUsers>() {
             @Override
             public void onResponse(Call<GridQueryResultUsers> call, Response<GridQueryResultUsers> response) {
+                if (response.body().data == null || response.body().data.isEmpty())
+                {
+                    Toast.makeText(thisActivity, R.string.login_error_network, Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                    return;
+                }
                 final SessionUser user = response.body().data.get(0);
 
                 OkHttpClient client = new OkHttpClient();

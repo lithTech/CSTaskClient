@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import okhttp3.ResponseBody;
@@ -35,6 +36,7 @@ import ru.cs.cstaskclient.util.ApiCall;
 public class WorkTimeViewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     ListView lvWorkTime;
+    View lvTotalHourHeader = null;
     WorkTimeApi workTimeApi;
 
     @Nullable
@@ -58,6 +60,18 @@ public class WorkTimeViewFragment extends Fragment implements AdapterView.OnItem
         tasksCall.enqueue(new ApiCall<WorkTime>(getActivity()) {
             @Override
             public void onResponse(Response<WorkTime> response) {
+                long sum = 0;
+                for (WorkTimeElem wt : response.body().workTimes) {
+                    sum += wt.workTimeDTO.workTime;
+                }
+
+                if (lvTotalHourHeader == null) {
+                    lvTotalHourHeader = LayoutInflater.from(getActivity()).inflate(R.layout.list_work_time_header, null, false);
+                    lvWorkTime.addHeaderView(lvTotalHourHeader);
+                }
+                TextView etWorkTimeSum = (TextView) lvTotalHourHeader.findViewById(R.id.tvWorkTimeWorkTimeSum);
+                etWorkTimeSum.setText(sum + " ч.");
+
                 lvWorkTime.setAdapter(new WorkTimeListAdapter(getActivity(), response.body().workTimes));
             }
         });
@@ -66,6 +80,7 @@ public class WorkTimeViewFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         final WorkTimeElem wt = (WorkTimeElem) lvWorkTime.getItemAtPosition(i);
+        if (wt == null) return;
         final Context context = getActivity();
         View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_worktime, null);
         final NumberPicker npHour = (NumberPicker) dialogView.findViewById(R.id.npHours);

@@ -19,6 +19,7 @@ public class ReceiveCookiesInterceptor implements Interceptor {
         Response originalResponse = chain.proceed(chain.request());
 
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
+            cookies.clear();
             for (String header : originalResponse.headers("Set-Cookie")) {
               cookies.add(header);
             }

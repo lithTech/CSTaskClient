@@ -39,11 +39,15 @@ import ru.cs.cstaskclient.fragments.assigned.AssignedTaskFragment;
 import ru.cs.cstaskclient.fragments.discuss.DiscussFragment;
 import ru.cs.cstaskclient.fragments.lastactivity.LastActivityFragment;
 import ru.cs.cstaskclient.fragments.project.ProjectViewFragment;
+import ru.cs.cstaskclient.fragments.tasks.TaskFavoritesFragment;
 import ru.cs.cstaskclient.fragments.tasks.TaskFragment;
 import ru.cs.cstaskclient.fragments.worktime.WorkTimeViewFragment;
 import ru.cs.cstaskclient.repository.ApiManager;
+import ru.cs.cstaskclient.repository.FunctionApi;
+import ru.cs.cstaskclient.repository.SecurityTester;
 import ru.cs.cstaskclient.repository.TaskApi;
 import ru.cs.cstaskclient.util.ApiCall;
+import ru.cs.cstaskclient.util.Callback;
 
 /**
  * Created by lithTech on 06.12.2016.
@@ -85,6 +89,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bitmap bitmap = BitmapFactory.decodeByteArray(SessionUser.CURRENT.avatar, 0,
                 SessionUser.CURRENT.avatar.length);
         loggedAvatar.setImageBitmap(bitmap);
+
+        applyAccess(navigationView);
+    }
+
+    private void applyAccess(NavigationView navigationView) {
+        final MenuItem assTasks = navigationView.getMenu().findItem(R.id.actAssignedTasks);
+        final MenuItem workTime = navigationView.getMenu().findItem(R.id.actWorkTime);
+        FunctionApi fApi = ApiManager.getFunctionApi();
+        SecurityTester.assignedTasksAvailable(this, fApi, new Callback() {
+            @Override
+            public void done(Object o) {
+                assTasks.setVisible((Boolean) o);
+            }
+        });
+
+        SecurityTester.workTimesAvailable(this, fApi, new Callback() {
+            @Override
+            public void done(Object o) {
+                workTime.setVisible((Boolean) o);
+            }
+        });
     }
 
     @Override
@@ -163,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.actAssignedTasks) {
             frClass = AssignedTaskFragment.class;
+        }
+        else if (id == R.id.actFavoriteTask) {
+            frClass = TaskFavoritesFragment.class;
         }
         else if (id == R.id.actGotoTask){
             gotoTask();

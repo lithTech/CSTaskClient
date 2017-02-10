@@ -52,6 +52,9 @@ public class ApiManager {
     public static TaskApi getTaskApi() {
         return getRetrofit(jsonFactory).create(TaskApi.class);
     }
+    public static FunctionApi getFunctionApi() {
+        return getRetrofit(stringFactory).create(FunctionApi.class);
+    }
     public static UserApi getUserApi() {
         return getRetrofit(jsonFactory).create(UserApi.class);
     }

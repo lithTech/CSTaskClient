@@ -8,6 +8,12 @@
             android:icon="@drawable/ic_num"
             android:title="@string/action_move_to_task"
             />
+        <item
+            android:id="@+id/actFavoriteTask"
+            android:checked="false"
+            android:icon="@drawable/ic_star"
+            android:title="@string/action_favorite_task"
+            />
     </group>
     <group android:checkableBehavior="single">
         <item
@@ -18,6 +24,7 @@
         <item
             android:id="@+id/actWorkTime"
             android:checked="false"
+            android:visible="false"
             android:icon="@drawable/ic_calendar"
             android:title="@string/workTime" />
         <item
@@ -28,6 +35,7 @@
         <item
             android:id="@+id/actAssignedTasks"
             android:checked="false"
+            android:visible="false"
             android:icon="@drawable/ic_worker"
             android:title="@string/assignedTasks" />
     </group>
