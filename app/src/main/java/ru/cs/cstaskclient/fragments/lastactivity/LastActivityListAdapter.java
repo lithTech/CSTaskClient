@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.util.LruCache;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,9 +69,11 @@ public class LastActivityListAdapter extends ArrayAdapter<LastActivityMessage> {
         tvMessage.setText(Html.fromHtml(la.descr, new Html.ImageGetter() {
             @Override
             public Drawable getDrawable(String s) {
+                if (TextUtils.isEmpty(s)) return null;
                 BitmapDrawable img = imgCache.get(s.hashCode());
                 if (img == null) {
                     img = ImageHelper.createDrawableByBase64Str(getContext(), s, maxW);
+                    if (img == null) return null;
                     imgCache.put(s.hashCode(), img);
                 }
 

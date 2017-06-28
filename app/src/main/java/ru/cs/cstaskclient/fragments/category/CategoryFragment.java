@@ -72,7 +72,8 @@ public class CategoryFragment extends Fragment implements AdapterView.OnItemClic
         catCall.enqueue(new ApiCall<List<Category>>(getActivity()) {
             @Override
             public void onResponse(Response<List<Category>> response) {
-                lvCategories.setAdapter(new CategoryAdapter(getActivity(), response.body()));
+                if (response.body() != null)
+                    lvCategories.setAdapter(new CategoryAdapter(getActivity(), response.body()));
                 callback.done(response.body());
             }
         });
